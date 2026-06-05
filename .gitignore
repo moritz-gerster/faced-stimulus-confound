@@ -1,0 +1,17 @@
+# Data & results
+data/
+results/
+plotting/output/*.png
+
+# Python
+__pycache__/
+*.pyc
+*.ai
+
+# OS & Office temp files
+.DS_Store
+*.tmp
+~*
+
+# Internal
+_internal/

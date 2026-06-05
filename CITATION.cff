@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the associated paper."
+title: "Stimulus identity, not emotion, drives EEG classification on the FACED dataset: Implications and recommendations"
+date-released: TODO
+license: MIT
+doi: TODO
+authors:
+  - family-names: Gerster
+    given-names: Moritz
+    TODO
+abstract: >-
+  TODO
+keywords:
+  - EEG
+  - emotion recognition
+  - machine learning
+  - affective computing
