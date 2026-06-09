@@ -79,7 +79,7 @@ def plot():
 
     fig = plt.figure(figsize=(DOUBLE_COL, 2.5))
     gs = GridSpec(1, 6, figure=fig,
-                 width_ratios=[4, 3, 0.3, 1.5, 0.3, 1.5],
+                 width_ratios=[4, 3, 0.3, 1.5, 0.5, 1.5],
                  wspace=0.05)
 
     ax_a = fig.add_subplot(gs[0, 0])
@@ -96,9 +96,9 @@ def plot():
     _panel_accuracy(ax_d)
 
     panel_label(ax_a, "a", title="3 videos per emotion")
-    panel_label(ax_b, "b", title="1 video per emotion")
-    panel_label(ax_c, "c", title="Train data (min)")
-    panel_label(ax_d, "d", title="Accuracy (%)")
+    panel_label(ax_b, "b", title="1 video per emotion", x=0.0)
+    panel_label(ax_c, "c", title="Train data (min)", x=-0.3)
+    panel_label(ax_d, "d", title="Accuracy (%)", x=-0.3)
 
     fig.tight_layout()
     save(fig, "fig1")
