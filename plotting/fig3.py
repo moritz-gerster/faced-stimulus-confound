@@ -268,7 +268,7 @@ def plot():
 
     panel_label(ax_a, "a", title="Concordance")
     ax_b.set_title("Accuracy (%)", fontsize=FONT_SIZE, pad=6, y=1.0)
-    panel_label(ax_c, "b", title="Label replacement")
+    panel_label(ax_c, "b", title="Label replacement", x=-0.03)
     ax_d.set_title("Accuracy (%)", fontsize=FONT_SIZE, pad=6, y=1.0)
 
     fig.tight_layout()
