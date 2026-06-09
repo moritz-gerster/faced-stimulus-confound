@@ -338,7 +338,7 @@ def panel_cross_subject_pipeline(ax, kept_mask=None, dummy_fracs=None):
     pie_y_centers = []
     pie_size = 0.075
 
-    xlim = (-1.4, pie_x + 1.5)
+    xlim = (-.7, pie_x + 1.5)
     ylim = (-1.5, total_h + 1.5)
 
     for emo_idx in range(n_emotions):

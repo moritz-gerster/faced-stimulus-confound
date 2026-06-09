@@ -50,7 +50,7 @@ def plot():
     _panel_result(ax_b)
 
     panel_label(ax_a, "a", title="Subject-wise Cross-Validation")
-    panel_label(ax_b, "b", title="Mean accuracy (%)")
+    panel_label(ax_b, "b", title="Mean accuracy (%)", x=-0.23)
 
     fig.tight_layout()
     save(fig, "fig2")
