@@ -136,9 +136,9 @@ def plot():
     fig.add_artist(line)
 
 
-    panel_label(ax_a, "a", title="Baseline")
-    panel_label(ax_b, "b", title="Concordance")
-    panel_label(ax_c, "c", title="Subjective labels")
+    panel_label(ax_a, "a", title="Baseline", x=-0.3)
+    panel_label(ax_b, "b", title="Concordance", x=-0.1)
+    panel_label(ax_c, "c", title="Subjective labels", x=-0.1)
     panel_label(ax_d, "d", title="Single video")
 
     save(fig, "fig5")
