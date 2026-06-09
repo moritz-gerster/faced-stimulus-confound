@@ -142,7 +142,7 @@ def panel_cv_classify(ax, kept_mask=None, dummy_fracs=None,
     pie_y_centers = []
     pie_size = 0.085
 
-    xlim = (-3.5 if show_emotion_labels else -0.5, pie_x + pie_r + 0.5)
+    xlim = (-2.0 if show_emotion_labels else -0.5, pie_x + pie_r + 1.5)
     ylim = (-1.0, total_h + 0.5)
 
     for emo_idx in range(n_emotions):
