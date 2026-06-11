@@ -1,4 +1,4 @@
-# Stimulus identity, not emotion, drives EEG classification on the FACED dataset: Implications and recommendations
+# Stimulus identity rather than emotion drives EEG classification on the FACED dataset
 
 This repository contains code to reproduce the analyses demonstrating that both intra-subject and cross-subject emotion classification accuracy on the FACED dataset (Chen et al., 2023) primarily reflects stimulus identity and temporal autocorrelation rather than generalizable emotion representations.
 
@@ -18,8 +18,9 @@ This repository contains code to reproduce the analyses demonstrating that both 
 | 2a. Baseline (replication) | 39.4 ± 1.1% | 11.1% |
 | 2b. Concordant trials | 33.9 ± 1.4% | 11.1% |
 | 2b. Discordant trials | 36.0 ± 1.8% | 11.1% |
-| 2c. Subjective labels, concordant | 26.3 ± 1.0% | 11.1% |
-| 2c. Subjective labels, discordant | 17.1 ± 1.5% | 11.1% |
+| 2c. Subjective labels (all trials) | 26.8 ± 0.9% | 11.1% |
+| 2c. Subjective labels, concordant | 31.9 ± 1.4% | 11.1% |
+| 2c. Subjective labels, discordant | 15.3 ± 1.2% | 11.1% |
 | 2d. Single video per emotion (1/3 data) | 44.9 ± 1.6% | 11.1% |
 
 ### Part 2e: Cross-subject decoding (CLISA)
@@ -39,7 +40,7 @@ This repository contains code to reproduce the analyses demonstrating that both 
 
 **This paper:**
 
-Gerster, M., et al. "Stimulus identity, not emotion, drives EEG classification on the FACED dataset: Implications and recommendations." *Preprint forthcoming.* <!-- TODO: Update with arXiv link -->
+Gerster, M., et al. "Stimulus identity rather than emotion drives EEG classification on the FACED dataset." *Preprint forthcoming.* <!-- TODO: Update with arXiv link -->
 
 **Original dataset paper:**
 

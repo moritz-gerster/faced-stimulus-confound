@@ -3,7 +3,6 @@ message: "If you use this code, please cite the associated paper."
 title: "Stimulus identity rather than emotion drives EEG classification on the FACED dataset"
 date-released: 2026-06-11
 license: MIT
-doi: TODO
 authors:
   - family-names: Gerster
     given-names: Moritz
