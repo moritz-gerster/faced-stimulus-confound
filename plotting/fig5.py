@@ -121,19 +121,33 @@ def plot():
 
     fig.tight_layout()
 
-    # Single chance line spanning all panels (drawn in figure coords)
+    # Chance lines (drawn in figure coords)
     import matplotlib.lines as mlines
-    chance_y = 100 / 9
     renderer = fig.canvas.get_renderer()
-    _, fig_y = fig.transFigure.inverted().transform(
-        ax_a.transData.transform((0, chance_y)))
+
+    chance_9 = 100 / 9
+    chance_8 = 100 / 8
+    _, fig_y9 = fig.transFigure.inverted().transform(
+        ax_a.transData.transform((0, chance_9)))
+    _, fig_y8 = fig.transFigure.inverted().transform(
+        ax_c.transData.transform((0, chance_8)))
+
     x_left = ax_a.get_position().x0
+    x_c_left = ax_c.get_position().x0
+    x_d_left = ax_d.get_position().x0
     x_right = ax_d.get_position().x1
-    line = mlines.Line2D(
-        [x_left, x_right], [fig_y, fig_y],
-        transform=fig.transFigure, color="#333333",
-        linewidth=.6, linestyle="--", zorder=5, clip_on=False)
-    fig.add_artist(line)
+
+    # 11.1% line: panels a+b and panel d (gap over panel c)
+    line_kw = dict(transform=fig.transFigure, color="#333333",
+                   linewidth=.6, linestyle="--", zorder=5, clip_on=False)
+    fig.add_artist(mlines.Line2D(
+        [x_left, x_c_left], [fig_y9, fig_y9], **line_kw))
+    fig.add_artist(mlines.Line2D(
+        [x_d_left, x_right], [fig_y9, fig_y9], **line_kw))
+
+    # 12.5% line: panel c only
+    fig.add_artist(mlines.Line2D(
+        [x_c_left, x_d_left], [fig_y8, fig_y8], **line_kw))
 
 
     panel_label(ax_a, "a", title="Baseline", x=-0.3)
