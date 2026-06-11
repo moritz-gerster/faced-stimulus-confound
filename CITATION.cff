@@ -1,17 +1,55 @@
 cff-version: 1.2.0
 message: "If you use this code, please cite the associated paper."
-title: "Stimulus identity, not emotion, drives EEG classification on the FACED dataset: Implications and recommendations"
-date-released: TODO
+title: "Stimulus identity rather than emotion drives EEG classification on the FACED dataset"
+date-released: 2026-06-11
 license: MIT
 doi: TODO
 authors:
   - family-names: Gerster
     given-names: Moritz
-    TODO
+    email: moritz.gerster@habs.tech
+    affiliation: "Human Augmented Brain Systems (HABS)"
+  - family-names: Sirotina
+    given-names: Elizaveta
+    affiliation: "Human Augmented Brain Systems (HABS)"
+  - family-names: Orlovskii
+    given-names: Anton
+    affiliation: "Human Augmented Brain Systems (HABS)"
+  - family-names: Hertz
+    given-names: Alexandra
+    affiliation: "Human Augmented Brain Systems (HABS)"
+  - family-names: Champaud
+    given-names: Juliette
+    affiliation: "Human Augmented Brain Systems (HABS)"
+  - family-names: Guarino
+    given-names: Domenico
+    affiliation: "Human Augmented Brain Systems (HABS)"
+  - family-names: Tulli
+    given-names: Silvia
+    affiliation: "Human Augmented Brain Systems (HABS)"
 abstract: >-
-  TODO
+  Reliable benchmark datasets are critical for advancing EEG-based emotion
+  recognition. The Finer-grained Affective Computing EEG Dataset (FACED) is the
+  largest publicly available EEG emotion dataset (123 subjects, nine emotion
+  categories) and a widely adopted benchmark. We demonstrate that both
+  intra-subject and cross-subject classification on FACED primarily reflects
+  stimulus identity rather than emotion. Using a linear classifier (LinearSVC)
+  and a deep learning model (CLISA), we show that (1) classification performance
+  is comparable for trials where subjects reported feeling versus not feeling the
+  assigned emotion; (2) accuracy drops when stimulus-assigned labels are replaced
+  with individual self-reports; and (3) accuracy increases when reducing to one
+  video per emotion despite discarding two-thirds of the data. These results
+  reflect three design choices in FACED: few stimuli per category,
+  stimulus-assigned labels, and within-video temporal splits for
+  cross-validation. Together, these make the dataset susceptible to temporal
+  autocorrelation and stimulus-identity confounds. To guide future work, we
+  propose five recommendations — spanning stimulus diversity, temporal
+  independence, and label validation — for emotion-decoding study designs that
+  mitigate these confounds.
 keywords:
   - EEG
   - emotion recognition
-  - machine learning
   - affective computing
+  - FACED
+  - stimulus confound
+  - machine learning
