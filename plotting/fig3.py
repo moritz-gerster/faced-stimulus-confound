@@ -240,7 +240,7 @@ def _panel_subjective_result(ax):
     ax.text(x2, 6, f"{val_disc:.1f}", ha="center", va="center",
             fontsize=FONT_SIZE, color="white", fontweight="bold", zorder=3)
 
-    chance_line(ax, 1 / 9, show_label=False)
+    chance_line(ax, 1 / 8, show_label=False)
 
     ax.set_ylim(0, 40)
     ax.set_xlim(-0.25, 1.05)
