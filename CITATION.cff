@@ -1,7 +1,9 @@
 cff-version: 1.2.0
-message: "If you use this code, please cite the associated paper."
+message: "If you use this code, please cite the associated preprint."
 title: "Stimulus identity rather than emotion drives EEG classification on the FACED dataset"
-date-released: 2026-06-11
+doi: "10.64898/2026.06.12.731889"
+url: "https://doi.org/10.64898/2026.06.12.731889"
+date-released: 2026-06-12
 license: MIT
 authors:
   - family-names: Gerster

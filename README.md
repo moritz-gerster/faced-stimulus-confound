@@ -40,7 +40,7 @@ This repository contains code to reproduce the analyses demonstrating that both 
 
 **This paper:**
 
-Gerster, M., et al. "Stimulus identity rather than emotion drives EEG classification on the FACED dataset." *Preprint forthcoming.* <!-- TODO: Update with arXiv link -->
+Gerster, M., Sirotina, E., Orlovskii, A., Hertz, A., Champaud, J., Guarino, D., & Tulli, S. "Stimulus identity rather than emotion drives EEG classification on the FACED dataset." *bioRxiv* (2026). DOI: [10.64898/2026.06.12.731889](https://doi.org/10.64898/2026.06.12.731889)
 
 **Original dataset paper:**
 
