@@ -3,6 +3,7 @@
 Part 1 — Intra-subject analyses:
   1a. Intra-subject baseline (within-video time split, replication of Chen et al. 2023)
   1b. Single video per emotion (intra-subject temporal CV)
+  1c. Cross-video leave-one-out
 
 Part 2 — Cross-subject analyses:
   2a. Cross-subject baseline (replication of Chen et al. 2023)
@@ -238,6 +239,71 @@ def run_intra_single_video() -> dict:
     cls_dir = RESULTS_DIR / "intra_single_video"
     os.makedirs(cls_dir, exist_ok=True)
     np.save(cls_dir / "scores.npy", subjects_score)
+
+    return {"scores": subjects_score}
+
+
+# ------------------------------------------------------------------
+# 1c. Cross-video leave-one-out
+# ------------------------------------------------------------------
+
+def run_cross_video() -> dict:
+    """Leave-one-video-out: train on 27 videos, test on held-out video.
+
+    Uses smoothed features (same as intra-subject baseline) so the only
+    difference from 1a is the split strategy. C is tuned on the held-out
+    video (same optimistic test-set selection as 1a).
+    """
+    random.seed(RANDOM_SEED)
+    np.random.seed(RANDOM_SEED)
+
+    smooth_dir = RESULTS_DIR / "smooth"
+    data = sio.loadmat(str(smooth_dir / "de_lds_fold0.mat"))["de_lds"]
+    data = _zscore_per_subject(data)
+
+    n_subs = data.shape[0]
+    wpt = WINDOWS_PER_TRIAL
+    n_vids = N_VIDEOS
+
+    vid_labels = np.array(VIDEO_LABELS_9CLASS)
+
+    subjects_correct = np.zeros(n_subs)
+    subjects_total = np.zeros(n_subs)
+
+    for held_out in trange(n_vids, desc="Cross-video LOO"):
+        train_vids = [v for v in range(n_vids) if v != held_out]
+
+        train_data_list = []
+        train_label_list = []
+        for v in train_vids:
+            start = v * wpt
+            vid_data = data[:, start:start + wpt, :].reshape(-1, N_FEATURES)
+            vid_label = np.full(n_subs * wpt, vid_labels[v])
+            train_data_list.append(vid_data)
+            train_label_list.append(vid_label)
+
+        data_train = np.concatenate(train_data_list)
+        label_train = np.concatenate(train_label_list)
+
+        start = held_out * wpt
+        data_test = data[:, start:start + wpt, :].reshape(-1, N_FEATURES)
+        label_test = np.full(n_subs * wpt, vid_labels[held_out])
+
+        clf, _ = _grid_search_C(data_train, label_train, data_test, label_test)
+        preds = clf.predict(data_test)
+
+        correct = (preds == label_test).reshape(n_subs, wpt)
+        subjects_correct += correct.sum(axis=1)
+        subjects_total += wpt
+
+    subjects_score = subjects_correct / subjects_total
+
+    cls_dir = RESULTS_DIR / "cross_video"
+    os.makedirs(cls_dir, exist_ok=True)
+    np.savez(
+        str(cls_dir / "predictions.npz"),
+        scores=subjects_score,
+    )
 
     return {"scores": subjects_score}
 

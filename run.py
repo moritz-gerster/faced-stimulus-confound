@@ -11,7 +11,7 @@ import numpy as np
 from scipy.stats import sem
 
 from decoding.classical.classification import (
-    run_intra_subject, run_intra_single_video,
+    run_intra_subject, run_intra_single_video, run_cross_video,
     run_baseline, run_subjective, run_single_video,
 )
 from decoding.concordance import run_concordance
@@ -20,7 +20,7 @@ from decoding.classical.features import load_de_features
 from decoding.labels import load_subjective_labels
 from decoding.classical.normalization import run_normalization
 
-VALID_ANALYSES = ["1a", "1b", "2a", "2b", "2c", "2d"]
+VALID_ANALYSES = ["1a", "1b", "1c", "2a", "2b", "2c", "2d"]
 
 
 def _mean_pm_sem(scores):
@@ -38,6 +38,9 @@ def _run_single(analysis_id: str) -> None:
     elif analysis_id == "1b":
         result = run_intra_single_video()
         print(f"1b. Single video per emotion (intra) — {_mean_pm_sem(result['scores'])}")
+    elif analysis_id == "1c":
+        result = run_cross_video()
+        print(f"1c. Cross-video leave-one-out — {_mean_pm_sem(result['scores'])}")
     elif analysis_id == "2a":
         result = run_baseline()
         print(f"2a. Cross-subject baseline — {_mean_pm_sem(result['scores'])}")
@@ -95,6 +98,12 @@ def _run_all() -> None:
     single_intra = run_intra_single_video()
     print(f"  {_mean_pm_sem(single_intra['scores'])} ({(time.time() - t) / 60:.1f} min)")
 
+    # --- 1c. Cross-video leave-one-out ---
+    t = time.time()
+    print("1c. Cross-video leave-one-out...")
+    cross_vid = run_cross_video()
+    print(f"  {_mean_pm_sem(cross_vid['scores'])} ({(time.time() - t) / 60:.1f} min)")
+
     # ==================================================================
     # Part 2 — Cross-subject analyses
     # ==================================================================
@@ -146,6 +155,7 @@ def _run_all() -> None:
     print("Part 1 — Intra-subject")
     print(f"  {'1a. Intra-subject baseline':<40} {_mean_pm_sem(intra['scores']):>20} {'11.1%':>8}")
     print(f"  {'1b. Single video per emotion (intra)':<40} {_mean_pm_sem(single_intra['scores']):>20} {'11.1%':>8}")
+    print(f"  {'1c. Cross-video leave-one-out':<40} {_mean_pm_sem(cross_vid['scores']):>20} {'11.1%':>8}")
     print("Part 2 — Cross-subject")
     print(f"  {'2a. Cross-subject baseline':<40} {_mean_pm_sem(baseline['scores']):>20} {'11.1%':>8}")
     print(f"  {'2b-i. Concordant trials':<40} {_mean_pm_sem(conc['concordant_acc']):>20} {'11.1%':>8}")
@@ -165,6 +175,7 @@ def _run_all() -> None:
         "| **Part 1 — Intra-subject** | | |\n"
         f"| 1a. Intra-subject baseline | {_mean_pm_sem(intra['scores'])} | 11.1% |\n"
         f"| 1b. Single video per emotion (intra) | {_mean_pm_sem(single_intra['scores'])} | 11.1% |\n"
+        f"| 1c. Cross-video leave-one-out | {_mean_pm_sem(cross_vid['scores'])} | 11.1% |\n"
         "| **Part 2 — Cross-subject** | | |\n"
         f"| 2a. Cross-subject baseline | {_mean_pm_sem(baseline['scores'])} | 11.1% |\n"
         f"| 2b-i. Concordant trials | {_mean_pm_sem(conc['concordant_acc'])} | 11.1% |\n"
