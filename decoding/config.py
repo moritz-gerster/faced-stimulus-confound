@@ -51,6 +51,30 @@ NEUTRAL_CLASS = CLASS_NAMES.index("Neutral")
 # Single-video indices: one video per emotion (0-based)
 SINGLE_VIDEO_INDICES = [0, 3, 6, 9, 12, 16, 19, 22, 25]
 
+# --- Permutation test ---
+N_PERMUTATIONS = 1000
+
+
+def class_video_indices(videos_per_class=3):
+    """Video indices grouped by emotion class, truncated to a common count.
+
+    Neutral has four clips while every other class has three. The extra
+    neutral clip (video 15, the last neutral clip) is dropped so each class
+    contributes equally to training and testing. This keeps the test set
+    class-balanced and chance at exactly 1/9.
+
+    Returns:
+        List of lists, where entry i contains the video indices for class i,
+        each of length `videos_per_class`.
+    """
+    groups = []
+    idx = 0
+    for label in range(len(CLASS_NAMES)):
+        count = VIDEO_LABELS_9CLASS.count(label)
+        groups.append(list(range(idx, idx + min(count, videos_per_class))))
+        idx += count
+    return groups
+
 # Subjective label score order in After_remarks.mat (first 8 scores)
 # Maps score index → 9-class emotion ID
 SCORE_NAMES = ["Joy", "Tenderness", "Inspiration", "Amusement",

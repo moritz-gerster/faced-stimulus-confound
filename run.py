@@ -12,6 +12,8 @@ from scipy.stats import sem
 
 from decoding.classical.classification import (
     run_intra_subject, run_intra_single_video, run_cross_video,
+    run_cross_video_balanced, run_temporal_control,
+    run_cross_video_permutation, run_temporal_permutation,
     run_baseline, run_subjective, run_single_video,
 )
 from decoding.concordance import run_concordance
@@ -20,7 +22,9 @@ from decoding.classical.features import load_de_features
 from decoding.labels import load_subjective_labels
 from decoding.classical.normalization import run_normalization
 
-VALID_ANALYSES = ["1a", "1b", "1c", "2a", "2b", "2c", "2d"]
+VALID_ANALYSES = ["1a", "1b", "1c", "1d", "1d-control",
+                  "1d-perm", "1d-control-perm",
+                  "2a", "2b", "2c", "2d"]
 
 
 def _mean_pm_sem(scores):
@@ -41,6 +45,20 @@ def _run_single(analysis_id: str) -> None:
     elif analysis_id == "1c":
         result = run_cross_video()
         print(f"1c. Cross-video leave-one-out — {_mean_pm_sem(result['scores'])}")
+    elif analysis_id == "1d":
+        for c_sel in ("optimistic", "nested"):
+            result = run_cross_video_balanced(c_selection=c_sel)
+            print(f"1d. Cross-video balanced ({c_sel} C) — {_mean_pm_sem(result['scores'])}")
+    elif analysis_id == "1d-control":
+        for c_sel in ("optimistic", "nested"):
+            result = run_temporal_control(c_selection=c_sel)
+            print(f"1d-control. Temporal control ({c_sel} C) — {_mean_pm_sem(result['scores'])}")
+    elif analysis_id == "1d-perm":
+        result = run_cross_video_permutation()
+        print(f"1d-perm. Cross-video permutation: p={result['p_value']:.4f}")
+    elif analysis_id == "1d-control-perm":
+        result = run_temporal_permutation()
+        print(f"1d-control-perm. Temporal permutation: p={result['p_value']:.4f}")
     elif analysis_id == "2a":
         result = run_baseline()
         print(f"2a. Cross-subject baseline — {_mean_pm_sem(result['scores'])}")
@@ -104,6 +122,28 @@ def _run_all() -> None:
     cross_vid = run_cross_video()
     print(f"  {_mean_pm_sem(cross_vid['scores'])} ({(time.time() - t) / 60:.1f} min)")
 
+    # --- 1d. Balanced cross-video generalization (2x2) ---
+    t = time.time()
+    print("1d. Cross-video balanced (optimistic C)...")
+    cv_opt = run_cross_video_balanced(c_selection="optimistic")
+    print(f"  {_mean_pm_sem(cv_opt['scores'])} ({(time.time() - t) / 60:.1f} min)")
+
+    t = time.time()
+    print("1d. Cross-video balanced (nested C)...")
+    cv_nest = run_cross_video_balanced(c_selection="nested")
+    print(f"  {_mean_pm_sem(cv_nest['scores'])} ({(time.time() - t) / 60:.1f} min)")
+
+    # --- 1d-control. Matched temporal control (2x2) ---
+    t = time.time()
+    print("1d-control. Temporal control (optimistic C)...")
+    tc_opt = run_temporal_control(c_selection="optimistic")
+    print(f"  {_mean_pm_sem(tc_opt['scores'])} ({(time.time() - t) / 60:.1f} min)")
+
+    t = time.time()
+    print("1d-control. Temporal control (nested C)...")
+    tc_nest = run_temporal_control(c_selection="nested")
+    print(f"  {_mean_pm_sem(tc_nest['scores'])} ({(time.time() - t) / 60:.1f} min)")
+
     # ==================================================================
     # Part 2 — Cross-subject analyses
     # ==================================================================
@@ -156,6 +196,11 @@ def _run_all() -> None:
     print(f"  {'1a. Intra-subject baseline':<40} {_mean_pm_sem(intra['scores']):>20} {'11.1%':>8}")
     print(f"  {'1b. Single video per emotion (intra)':<40} {_mean_pm_sem(single_intra['scores']):>20} {'11.1%':>8}")
     print(f"  {'1c. Cross-video leave-one-out':<40} {_mean_pm_sem(cross_vid['scores']):>20} {'11.1%':>8}")
+    print("  1d. Balanced cross-video vs temporal control (2x2):")
+    header = "Split \\ C-sel"
+    print(f"    {header:<28} {'Optimistic':>20} {'Nested':>20}")
+    print(f"    {'Cross-video (1d)':<28} {_mean_pm_sem(cv_opt['scores']):>20} {_mean_pm_sem(cv_nest['scores']):>20}")
+    print(f"    {'Temporal (1d-control)':<28} {_mean_pm_sem(tc_opt['scores']):>20} {_mean_pm_sem(tc_nest['scores']):>20}")
     print("Part 2 — Cross-subject")
     print(f"  {'2a. Cross-subject baseline':<40} {_mean_pm_sem(baseline['scores']):>20} {'11.1%':>8}")
     print(f"  {'2b-i. Concordant trials':<40} {_mean_pm_sem(conc['concordant_acc']):>20} {'11.1%':>8}")
@@ -176,6 +221,10 @@ def _run_all() -> None:
         f"| 1a. Intra-subject baseline | {_mean_pm_sem(intra['scores'])} | 11.1% |\n"
         f"| 1b. Single video per emotion (intra) | {_mean_pm_sem(single_intra['scores'])} | 11.1% |\n"
         f"| 1c. Cross-video leave-one-out | {_mean_pm_sem(cross_vid['scores'])} | 11.1% |\n"
+        f"| 1d. Cross-video balanced (optimistic C) | {_mean_pm_sem(cv_opt['scores'])} | 11.1% |\n"
+        f"| 1d. Cross-video balanced (nested C) | {_mean_pm_sem(cv_nest['scores'])} | 11.1% |\n"
+        f"| 1d-control. Temporal (optimistic C) | {_mean_pm_sem(tc_opt['scores'])} | 11.1% |\n"
+        f"| 1d-control. Temporal (nested C) | {_mean_pm_sem(tc_nest['scores'])} | 11.1% |\n"
         "| **Part 2 — Cross-subject** | | |\n"
         f"| 2a. Cross-subject baseline | {_mean_pm_sem(baseline['scores'])} | 11.1% |\n"
         f"| 2b-i. Concordant trials | {_mean_pm_sem(conc['concordant_acc'])} | 11.1% |\n"
